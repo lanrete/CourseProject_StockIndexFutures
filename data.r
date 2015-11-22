@@ -17,3 +17,13 @@ DestiFile <- paste0(list,".csv")
 for (i in 1:50) {
   download.file(FileUrl[i], destfile = DestiFile[i])
 }
+
+cleandata <- function(number){
+    temp <- read.csv(paste0(getwd(),"/",number,".csv"))
+    temp <- subset.data.frame(temp,select = c("日期","收盘价","前收盘"))
+    temp$日期 <- as.POSIXct(temp$日期)
+    temp <- subset.data.frame(temp,months(temp$日期)=="十一月" | months(temp$日期)=="十月")
+    write.csv(temp, file=paste0("./clean",number,".csv"),row.names = FALSE)
+}
+
+for (i in 1:50) {cleandata(list[i])}
